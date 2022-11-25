@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    // got the car controller idea from youtube https://www.youtube.com/watch?v=TBIYSksI10k&t=931s&ab_channel=SpawnCampGames
     public Rigidbody sphereRB;
 
     public Rigidbody carRB;
@@ -36,7 +37,7 @@ public class CarController : MonoBehaviour
         moveInput = Input.GetAxisRaw("Vertical");
         turnInput = Input.GetAxisRaw("Horizontal");
 
-        // Calculate Turning Rotation
+       
         float newRot = turnInput * turnSpeed * Time.deltaTime * moveInput;
         
         if (isCarGrounded)
@@ -45,18 +46,18 @@ public class CarController : MonoBehaviour
         // Set Cars Position to Our Sphere
         transform.position = sphereRB.transform.position;
 
-        // Raycast to the ground and get normal to align car with it.
+        
         RaycastHit hit;
         isCarGrounded = Physics.Raycast(transform.position, -transform.up, out hit, 1f, groundLayer);
         
-        // Rotate Car to align with ground
+    
         Quaternion toRotateTo = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
         transform.rotation = Quaternion.Slerp(transform.rotation, toRotateTo, alignToGroundTime * Time.deltaTime);
         
-        // Calculate Movement Direction
+        
         moveInput *= moveInput > 0 ? fwdSpeed : revSpeed;
         
-        // Calculate Drag
+        
         sphereRB.drag = isCarGrounded ? normalDrag : modifiedDrag;
     }
 
